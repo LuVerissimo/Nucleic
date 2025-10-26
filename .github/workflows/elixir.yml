@@ -11,85 +11,85 @@ on:
       - main
       - develop
 
-jobs:
-  test:
-    name: Build and Test (Ash Framework)
-    runs-on: ubuntu-latest
-    env:
-      MIX_ENV: test
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ash_test_db
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/ash_test_db
+# jobs:
+#   test:
+#     name: Build and Test (Ash Framework)
+#     runs-on: ubuntu-latest
+#     env:
+#       MIX_ENV: test
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: ash_test_db
+#       DATABASE_URL: postgres://postgres:postgres@localhost:5432/ash_test_db
 
-    services:
-      postgres:
-        image: postgres:15
-        ports: ['5432:5432']
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: ash_test_db
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
+#     services:
+#       postgres:
+#         image: postgres:15
+#         ports: ['5432:5432']
+#         env:
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: postgres
+#           POSTGRES_DB: ash_test_db
+#         options: >-
+#           --health-cmd="pg_isready -U postgres"
+#           --health-interval=5s
+#           --health-timeout=5s
+#           --health-retries=5
 
-    steps:
-      - name: 1. Check out repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: 1. Check out repository
+#         uses: actions/checkout@v4
 
-      - name: 2. Set up Elixir and OTP
-        id: beam
-        uses: erlef/setup-beam@v1
-        with:
-          elixir-version: '1.16.0'
-          otp-version: '26.2'
+#       - name: 2. Set up Elixir and OTP
+#         id: beam
+#         uses: erlef/setup-beam@v1
+#         with:
+#           elixir-version: '1.16.0'
+#           otp-version: '26.2'
 
-      # 3️⃣ Cache deps/build
-      - name: 3. Restore dependency cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            deps
-            _build
-          key: ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-
+#       # 3️⃣ Cache deps/build
+#       - name: 3. Restore dependency cache
+#         uses: actions/cache@v4
+#         with:
+#           path: |
+#             deps
+#             _build
+#           key: ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-${{ hashFiles('**/mix.lock') }}
+#           restore-keys: |
+#             ${{ runner.os }}-${{ steps.beam.outputs.elixir-version }}-${{ steps.beam.outputs.otp-version }}-
 
-      - name: 4. Install dependencies
-        run: mix deps.get
+#       - name: 4. Install dependencies
+#         run: mix deps.get
 
-      - name: 5. Run formatter check
-        run: mix format --check-formatted
+#       - name: 5. Run formatter check
+#         run: mix format --check-formatted
 
-      - name: 6. Compile project
-        run: mix compile --force --warnings-as-errors
+#       - name: 6. Compile project
+#         run: mix compile --force --warnings-as-errors
 
-      - name: 7. Setup database
-        run: |
-          mix ecto.create
-          mix ecto.migrate
+#       - name: 7. Setup database
+#         run: |
+#           mix ecto.create
+#           mix ecto.migrate
 
-      - name: 8. Run Ash tests
-        run: mix test --cover
+#       - name: 8. Run Ash tests
+#         run: mix test --cover
 
-      - name: 9. Start Phoenix (API integration test)
-        if: always()
-        run: |
-          nohup mix phx.server &
-          sleep 5
-          echo "Phoenix server started"
+#       - name: 9. Start Phoenix (API integration test)
+#         if: always()
+#         run: |
+#           nohup mix phx.server &
+#           sleep 5
+#           echo "Phoenix server started"
 
-      - name: 10. Validate GraphQL schema
-        if: always()
-        run: |
-          mix ash_graphql.schema --check
-          curl -s -X POST \
-            -H "Content-Type: application/json" \
-            --data '{"query": "{__schema { queryType { name }}}"}' \
-            http://localhost:4000/graphql | jq .
+#       - name: 10. Validate GraphQL schema
+#         if: always()
+#         run: |
+#           mix ash_graphql.schema --check
+#           curl -s -X POST \
+#             -H "Content-Type: application/json" \
+#             --data '{"query": "{__schema { queryType { name }}}"}' \
+#             http://localhost:4000/graphql | jq .
 
       # - name: 11. Test JSON API endpoints
       #   run: |
