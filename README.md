@@ -34,7 +34,7 @@ The project is built with a real-time, scalable, and modern stack.
 
 ## Architecture
 
-*(This diagram will be populated in a later step. For now, it's a great placeholder)*
+*(This diagram will be populated in a later step. For now, it's a placeholder)*
 
 ```mermaid
 flowchart TD
