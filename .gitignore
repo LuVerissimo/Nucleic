@@ -8,3 +8,23 @@ erl_crash.dump
 *.beam
 /config/*.secret.exs
 .elixir_ls/
+
+
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+.npm
+.pnpm-store
+
+# React/Frontend Build
+.next
+.nuxt
+dist
+build
+.out
+
+# Editor
+.idea
+.vscode
