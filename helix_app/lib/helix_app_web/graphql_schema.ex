@@ -1,8 +1,7 @@
 defmodule HelixAppWeb.GraphqlSchema do
   use Absinthe.Schema
-
   use AshGraphql,
-    domains: []
+    domains: [HelixApp.Domain]
 
   import_types Absinthe.Plug.Types
 
