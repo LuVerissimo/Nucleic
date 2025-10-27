@@ -78,8 +78,7 @@ config :spark,
 config :helix_app,
   ecto_repos: [HelixApp.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [HelixApp.Accounts]
-
+  ash_domains: [HelixApp.Accounts, HelixApp.Domain]
 # Configures the endpoint
 config :helix_app, HelixAppWeb.Endpoint,
   url: [host: "localhost"],
