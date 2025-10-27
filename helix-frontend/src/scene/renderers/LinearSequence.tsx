@@ -54,10 +54,10 @@ const Scene = ({ sequence }: SceneProps) => {
     );
 };
 
-export const LinearSequence = () => {
-    // A simple test sequence. We'll fetch this from Elixir later.
-    const sequence = 'ATGC'.repeat(100);
-
+interface LinearSequenceProps {
+    sequence: string;
+}
+export const LinearSequence = ({ sequence }: LinearSequenceProps) => {
     return (
         <div
             style={{ height: '300px', width: '100%', border: '1px solid #555' }}
